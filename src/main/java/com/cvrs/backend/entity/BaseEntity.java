@@ -10,4 +10,6 @@ public class BaseEntity {
 
     private String Hello;
 
+    private String name;
+
 }
