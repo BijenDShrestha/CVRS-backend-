@@ -8,4 +8,6 @@ public class BaseEntity {
 
     private String createdDate;
 
+    private String Hello;
+
 }
