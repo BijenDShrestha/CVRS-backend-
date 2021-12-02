@@ -5,11 +5,13 @@ import com.cvrs.backend.entity.baseEntity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
 import java.io.Serializable;
 
 @Getter
 @Setter
-public class MedicalCondition extends BaseEntity implements Serializable {
+@Entity
+public class MedicalCondition extends BaseEntity {
 
     private boolean serious;
 

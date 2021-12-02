@@ -6,12 +6,11 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
-public class VaccineToAgeCategory extends BaseEntity implements Serializable {
+public class VaccineToAgeCategory extends BaseEntity {
 
     @ManyToOne
     private AgeCategory ageCategory;

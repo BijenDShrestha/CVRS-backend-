@@ -11,6 +11,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-public class Occupation extends BaseEntity implements Serializable {
+public class Occupation extends BaseEntity {
 
 }

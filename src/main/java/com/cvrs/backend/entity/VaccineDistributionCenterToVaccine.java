@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-public class VaccineDistributionCenterToVaccine extends BaseEntity implements Serializable {
+public class VaccineDistributionCenterToVaccine extends BaseEntity {
 
     @ManyToOne
     private VaccineDistributionCenter vaccineDistributionCenter;

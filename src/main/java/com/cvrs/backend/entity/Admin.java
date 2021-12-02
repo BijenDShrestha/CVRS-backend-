@@ -2,11 +2,17 @@ package com.cvrs.backend.entity;
 
 import com.cvrs.backend.entity.baseEntity.BaseEntity;
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.io.Serializable;
 
-public class Admin extends BaseEntity implements Serializable {
+@Getter
+@Setter
+@Entity
+public class Admin extends BaseEntity {
     @NotNull
     private String userName;
 

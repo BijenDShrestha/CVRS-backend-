@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
-public class ManufacturingCompany extends BaseEntity implements Serializable {
+public class ManufacturingCompany extends BaseEntity {
 
     @NotNull
     @Column(name = "phone_num", unique = true)

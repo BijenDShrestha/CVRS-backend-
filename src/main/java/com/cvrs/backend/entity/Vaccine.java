@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-public class Vaccine extends BaseEntity implements Serializable {
+public class Vaccine extends BaseEntity {
 
     @NotNull
     @Column(name = "batch_num")

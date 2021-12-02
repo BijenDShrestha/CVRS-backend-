@@ -2,14 +2,16 @@ package com.cvrs.backend.entity.baseEntity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@MappedSuperclass
 @Getter
 @Setter
-@Entity
+@ToString
 public class BaseEntity implements Serializable {
 
     @Id

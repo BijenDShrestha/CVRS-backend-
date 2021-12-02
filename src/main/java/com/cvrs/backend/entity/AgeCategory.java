@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
-public class AgeCategory extends BaseEntity implements Serializable {
+@Table(name = "age_category")
+public class AgeCategory extends BaseEntity {
 
     private String range;
 

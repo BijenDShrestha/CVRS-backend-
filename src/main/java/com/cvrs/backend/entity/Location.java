@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-public class Location extends BaseEntity implements Serializable {
+public class Location extends BaseEntity {
     @Column(name = "ward_no")
     private Integer wardNo;
 

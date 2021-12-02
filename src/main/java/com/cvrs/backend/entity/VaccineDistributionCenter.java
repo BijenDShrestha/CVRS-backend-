@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-public class VaccineDistributionCenter extends BaseEntity implements Serializable {
+public class VaccineDistributionCenter extends BaseEntity {
 
     @ManyToOne
     private Location location;
