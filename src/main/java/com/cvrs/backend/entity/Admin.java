@@ -1,5 +1,6 @@
 package com.cvrs.backend.entity;
 
+import com.cvrs.backend.entity.baseEntity.BaseEntity;
 import com.sun.istack.NotNull;
 
 import javax.persistence.Column;

@@ -1,20 +1,25 @@
 package com.cvrs.backend.entity;
 
 import com.cvrs.backend.entity.baseEntity.BaseEntity;
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
 
+@Entity
 @Getter
 @Setter
-@Entity
-public class VaccineDistributionCenter extends BaseEntity implements Serializable {
+public class ManufacturingCompany extends BaseEntity implements Serializable {
 
-    @ManyToOne
+    @NotNull
+    @Column(name = "phone_num", unique = true)
+    private String phoneNum;
+
+    @OneToOne
     private Location location;
 
 }

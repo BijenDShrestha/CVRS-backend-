@@ -1,6 +1,5 @@
-package com.cvrs.backend.entity;
+package com.cvrs.backend.entity.baseEntity;
 
-import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,6 +26,6 @@ public class BaseEntity implements Serializable {
     private Long updatedBy;
 
     @Column(name = "created_date", updatable = false)
-    private Date createdDate;
+    private Date createdDate = new Date();
 
 }
