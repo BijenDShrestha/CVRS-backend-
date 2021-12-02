@@ -1,6 +1,8 @@
 package com.cvrs.backend.entity;
 
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -9,11 +11,9 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
+@Getter
+@Setter
 public class citizen extends BaseEntity implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
-    private Long id;
 
     @NotNull
     @Column(name = "first_name")
@@ -27,16 +27,17 @@ public class citizen extends BaseEntity implements Serializable {
     private String lastName;
 
     @NotNull
-    @Column(name = "gender")
     private String gender;
 
     @NotNull
-    @Column(name = "age")
     private Integer age;
 
     @NotNull
-    @Column(name = "dbo")
     private Date dob;
+
+    @NotNull
+    @Column(unique = true)
+    private String citizenship;
 
     @Column(name = "vaccinated_status")
     private String vaccinatedStatus;

@@ -20,6 +20,8 @@ public class BaseEntity implements Serializable {
     @Column(name = "id", unique = true)
     private Long id;
 
+    private String name;
+
     @Column(name = "created_by", updatable = false)
     private Long createdBy;
 
@@ -28,8 +30,5 @@ public class BaseEntity implements Serializable {
 
     @Column(name = "created_date", updatable = false)
     private Date createdDate;
-
-    @Column(name = "name")
-    private String name;
 
 }
