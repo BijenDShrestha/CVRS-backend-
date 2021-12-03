@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Table(name = "manufacturing_company")
-public class ManufacturingCompany extends BaseEntity {
+public class ManufacturingCompanyEntity extends BaseEntity {
 
     @NotNull
     @Column(name = "phone_num", unique = true)

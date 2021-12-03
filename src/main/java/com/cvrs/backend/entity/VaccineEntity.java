@@ -25,6 +25,6 @@ public class VaccineEntity extends BaseEntity {
 
     @NotNull
     @ManyToOne
-    private ManufacturingCompany manufacturingCompany;
+    private ManufacturingCompanyEntity manufacturingCompanyEntity;
 
 }
