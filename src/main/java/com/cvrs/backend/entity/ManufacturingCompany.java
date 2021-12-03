@@ -8,10 +8,12 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Getter
 @Setter
+@Table(name = "manufacturing_company")
 public class ManufacturingCompany extends BaseEntity {
 
     @NotNull
@@ -19,6 +21,6 @@ public class ManufacturingCompany extends BaseEntity {
     private String phoneNum;
 
     @OneToOne
-    private Location location;
+    private LocationEntity locationEntity;
 
 }

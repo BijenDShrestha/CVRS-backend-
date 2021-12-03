@@ -5,16 +5,14 @@ import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 @Getter
 @Setter
 @Entity
-public class Citizen extends BaseEntity {
+@Table(name = "citizen")
+public class CitizenEntity extends BaseEntity {
 
     @NotNull
     @Column(name = "first_name")
@@ -45,22 +43,22 @@ public class Citizen extends BaseEntity {
     private String vaccinatedStatus;
 
     @OneToOne
-    private Vaccine vaccine;
+    private VaccineEntity vaccineEntity;
 
     @ManyToOne
     @NotNull
-    private MedicalCondition medicalCondition;
+    private MedicalConditionEntity medicalConditionEntity;
 
     @ManyToOne
     @NotNull
-    private Location location;
+    private LocationEntity locationEntity;
 
     @ManyToOne
     @NotNull
-    private Occupation occupation;
+    private OccupationEntity occupationEntity;
 
     @ManyToOne
     @NotNull
-    private AgeCategory ageCategory;
+    private AgeCategoryEntity ageCategoryEntity;
 
 }

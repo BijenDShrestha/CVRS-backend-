@@ -6,15 +6,16 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 
 @Getter
 @Setter
 @Entity
-public class VaccineDistributionCenterToVaccine extends BaseEntity {
+@Table(name = "vaccine_distribution_center")
+public class VaccineDistributionCenterEntity extends BaseEntity {
 
     @ManyToOne
-    private VaccineDistributionCenter vaccineDistributionCenter;
+    private LocationEntity locationEntity;
 
-    @ManyToOne
-    private Vaccine vaccine;
 }

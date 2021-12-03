@@ -7,11 +7,13 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Getter
 @Setter
 @Entity
-public class Admin extends BaseEntity {
+@Table(name = "admin")
+public class AdminEntity extends BaseEntity {
     @NotNull
     private String userName;
 
