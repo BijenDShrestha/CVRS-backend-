@@ -6,12 +6,12 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
 public class Location extends BaseEntity {
+
     @Column(name = "ward_no")
     private Integer wardNo;
 

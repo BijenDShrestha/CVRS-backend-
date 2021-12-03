@@ -1,4 +1,4 @@
-package com.cvrs.backend.dto;
+package com.cvrs.backend.dto.baseDto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,10 @@ import java.util.Date;
 @Getter
 @Setter
 public class BaseDto implements Serializable {
+
     private Long id;
+
+    private String name;
 
     private Long createdBy;
 
@@ -17,5 +20,4 @@ public class BaseDto implements Serializable {
 
     private Date createdDate;
 
-    private String name;
 }
