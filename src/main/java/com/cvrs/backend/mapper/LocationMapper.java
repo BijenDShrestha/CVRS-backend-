@@ -4,15 +4,14 @@ import com.cvrs.backend.dto.LocationDto;
 import com.cvrs.backend.entity.LocationEntity;
 import com.cvrs.backend.mapper.baseMapper.GenericBaseMapperImpl;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Configuration;
 
-@Configurable
+@Configuration
 public class LocationMapper extends GenericBaseMapperImpl<LocationEntity, LocationDto> {
     private ModelMapper modelMapper;
-    @Autowired
-    public LocationMapper(ModelMapper modelMapper, Class<LocationEntity> entityClass, Class<LocationDto> locationDtoClass, ModelMapper modelMapper1) {
-        super(modelMapper, entityClass, locationDtoClass);
-        this.modelMapper = modelMapper1;
+
+    public LocationMapper(ModelMapper modelMapper) {
+        super(modelMapper, LocationEntity.class, LocationDto.class);
+        this.modelMapper = modelMapper;
     }
 }
