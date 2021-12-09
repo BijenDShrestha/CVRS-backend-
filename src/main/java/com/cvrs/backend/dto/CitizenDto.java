@@ -29,11 +29,11 @@ public class CitizenDto extends BaseDto {
 
     private Long vaccineId;
 
-    private Long medicalConditionId;
+    private Long medicalConditionEntityId;
 
-    private Long locationId;
+    private Long locationEntityId;
 
-    private Long occupationId;
+    private Long occupationEntityId;
 
-    private Long ageCategoryId;
+    private Long ageCategoryEntityId;
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VaccineDistributionCenterToVaccineDto extends BaseDto {
-    private Long vaccineDistributionCenterId;
+    private Long vaccineDistributionCenterEntityId;
 
-    private Long vaccineId;
+    private Long vaccineEntityId;
 }

@@ -9,5 +9,5 @@ import lombok.Setter;
 public class ManufacturingCompanyDto extends BaseDto {
     private String phoneNum;
 
-    private Long locationId;
+    private Long LocationEntityId;
 }

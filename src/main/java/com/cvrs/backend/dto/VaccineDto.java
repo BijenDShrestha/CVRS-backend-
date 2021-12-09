@@ -11,6 +11,6 @@ public class VaccineDto extends BaseDto {
 
     private Long units;
 
-    private Long manufacturingCompanyId;
+    private Long manufacturingCompanyEntityId;
 
 }

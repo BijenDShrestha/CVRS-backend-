@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class VaccineDistributionCenterDto extends BaseDto {
 
-    private Long locationId;
+    private Long locationEntityId;
 
 }

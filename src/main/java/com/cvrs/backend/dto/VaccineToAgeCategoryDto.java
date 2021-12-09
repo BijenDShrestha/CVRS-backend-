@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VaccineToAgeCategoryDto extends BaseDto {
-    private Long ageCategoryId;
+    private Long ageCategoryEntityId;
 
-    private Long vaccineId;
+    private Long vaccineEntityId;
 }
