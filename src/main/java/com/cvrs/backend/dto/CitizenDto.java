@@ -21,6 +21,8 @@ public class CitizenDto extends BaseDto {
 
     private String citizenship;
 
+    private String email;
+
     private String phoneNum;
 
     private String vaccinatedStatus;

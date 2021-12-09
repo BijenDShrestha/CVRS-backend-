@@ -36,6 +36,9 @@ public class CitizenEntity extends BaseEntity {
     private String citizenship;
 
     @NotNull
+    private String email;
+
+    @NotNull
     @Column(name = "phone_num", unique = true)
     private String phoneNum;
 
