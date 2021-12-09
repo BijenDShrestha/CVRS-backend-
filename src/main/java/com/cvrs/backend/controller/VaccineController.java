@@ -39,7 +39,7 @@ public class VaccineController extends BaseController {
         return new ResponseEntity<>(new ResponseDto("Successfully saved", vaccineDto), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity<ResponseDto> update(@RequestBody VaccineDto vaccineDto){
         try {
             vaccineService.save(vaccineMapper.mapToEntity(vaccineDto));
