@@ -29,7 +29,7 @@ public class MedicalConditionController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto> save(MedicalConditionDto medicalConditionDto){
+    public ResponseEntity<ResponseDto> save(@RequestBody MedicalConditionDto medicalConditionDto){
         try {
             medicalConditionService.save(medicalConditionMapper.mapToEntity(medicalConditionDto));
         }catch (Exception exception){
@@ -39,7 +39,7 @@ public class MedicalConditionController extends BaseController {
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDto> update(MedicalConditionDto medicalConditionDto){
+    public ResponseEntity<ResponseDto> update(@RequestBody MedicalConditionDto medicalConditionDto){
         try {
             medicalConditionService.save(medicalConditionMapper.mapToEntity(medicalConditionDto));
         }catch (Exception exception){
@@ -49,7 +49,7 @@ public class MedicalConditionController extends BaseController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ResponseDto> delete(MedicalConditionDto medicalConditionDto){
+    public ResponseEntity<ResponseDto> delete(@RequestBody MedicalConditionDto medicalConditionDto){
         try {
             medicalConditionService.delete(medicalConditionMapper.mapToEntity(medicalConditionDto));
         }catch (Exception exception){

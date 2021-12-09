@@ -29,7 +29,7 @@ public class OccupationController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto> save(OccupationDto occupationDto){
+    public ResponseEntity<ResponseDto> save(@RequestBody OccupationDto occupationDto){
         try {
             occupationService.save(occupationMapper.mapToEntity(occupationDto));
         }catch (Exception exception){
@@ -39,7 +39,7 @@ public class OccupationController extends BaseController {
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDto> update(OccupationDto occupationDto){
+    public ResponseEntity<ResponseDto> update(@RequestBody OccupationDto occupationDto){
         try {
             occupationService.save(occupationMapper.mapToEntity(occupationDto));
         }catch (Exception exception){

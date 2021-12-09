@@ -29,17 +29,18 @@ public class ManufacturingCompanyController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto> save(ManufacturingCompanyDto manufacturingCompanyDto){
+    public ResponseEntity<ResponseDto> save(@RequestBody ManufacturingCompanyDto manufacturingCompanyDto){
+//        manufacturingCompanyDto.setName("Shakti Group");
         try {
             manufacturingCompanyService.save(manufacturingCompanyMapper.mapToEntity(manufacturingCompanyDto));
         }catch (Exception exception){
             throw new NotSavedException("Not Saved", exception);
         }
-        return new ResponseEntity<>(new ResponseDto("Successfully Saved", manufacturingCompanyDto), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto("Successfully Saved", manufacturingCompanyMapper.mapToDto(manufacturingCompanyMapper.mapToEntity(manufacturingCompanyDto))), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDto> update(ManufacturingCompanyDto manufacturingCompanyDto){
+    public ResponseEntity<ResponseDto> update(@RequestBody ManufacturingCompanyDto manufacturingCompanyDto){
         try {
             manufacturingCompanyService.save(manufacturingCompanyMapper.mapToEntity(manufacturingCompanyDto));
         }catch (Exception exception){
@@ -49,7 +50,7 @@ public class ManufacturingCompanyController extends BaseController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ResponseDto> delete(ManufacturingCompanyDto manufacturingCompanyDto){
+    public ResponseEntity<ResponseDto> delete(@RequestBody ManufacturingCompanyDto manufacturingCompanyDto){
         try {
             manufacturingCompanyService.delete(manufacturingCompanyMapper.mapToEntity(manufacturingCompanyDto));
         }catch (Exception exception){

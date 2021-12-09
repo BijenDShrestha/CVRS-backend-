@@ -30,7 +30,7 @@ public class CitizenController extends BaseController {
 
     // Todo: saving all details of citizen in different entity while saving citizen
     @PostMapping
-    public ResponseEntity<ResponseDto> save(CitizenDto citizenDto){
+    public ResponseEntity<ResponseDto> save(@RequestBody CitizenDto citizenDto){
         try {
             citizenService.save(citizenMapper.mapToEntity(citizenDto));
         }catch (Exception exception){
@@ -40,7 +40,7 @@ public class CitizenController extends BaseController {
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDto> update(CitizenDto citizenDto){
+    public ResponseEntity<ResponseDto> update(@RequestBody CitizenDto citizenDto){
         try {
             citizenService.save(citizenMapper.mapToEntity(citizenDto));
         }catch (Exception exception){
@@ -50,7 +50,7 @@ public class CitizenController extends BaseController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ResponseDto> delete(CitizenDto citizenDto){
+    public ResponseEntity<ResponseDto> delete(@RequestBody CitizenDto citizenDto){
         try {
             citizenService.delete(citizenMapper.mapToEntity(citizenDto));
         }catch (Exception exception){
