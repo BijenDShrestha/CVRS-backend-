@@ -12,6 +12,7 @@ import com.cvrs.backend.util.APIConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class AdminController extends BaseController {
 
     private IAdminService adminService;
     private AdminMapper adminMapper;
+    private PasswordEncoder encoder;
 
     @Autowired
     public AdminController(IAdminService adminService, AdminMapper adminMapper) {
@@ -31,6 +33,7 @@ public class AdminController extends BaseController {
 
     @PostMapping
     public ResponseEntity<ResponseDto> save(@RequestBody AdminDto adminDto){
+        adminDto.setPassword(encoder.encode(adminDto.getPassword()));
         try {
             adminService.save(adminMapper.mapToEntity(adminDto));
         }catch (Exception exception){
@@ -41,6 +44,8 @@ public class AdminController extends BaseController {
 
     @PutMapping
     public ResponseEntity<ResponseDto> update(@RequestBody AdminDto adminDto){
+        adminDto.setPassword(encoder.encode(adminDto.getPassword()));
+
         try {
             adminService.save(adminMapper.mapToEntity(adminDto));
         }catch (Exception exception){
