@@ -45,6 +45,8 @@ public class CitizenEntity extends BaseEntity {
     @Column(name = "vaccinated_status")
     private String vaccinatedStatus;
 
+    private Boolean priority;
+
     @OneToOne
     private VaccineEntity vaccineEntity;
 
