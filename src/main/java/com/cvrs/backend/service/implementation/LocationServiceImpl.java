@@ -20,4 +20,5 @@ public class LocationServiceImpl extends BaseServiceImpl<LocationEntity, Long> i
         super(repository);
         this.locationRepository = locationRepository;
     }
+
 }

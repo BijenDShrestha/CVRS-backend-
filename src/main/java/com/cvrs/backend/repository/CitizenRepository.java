@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CitizenRepository extends JpaRepository<CitizenEntity, Long> {
+    CitizenEntity findByCitizenshipEquals(String citizenship);
 }

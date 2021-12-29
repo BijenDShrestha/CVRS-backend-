@@ -2,6 +2,7 @@ package com.cvrs.backend.controller;
 
 import com.cvrs.backend.controller.base.BaseController;
 import com.cvrs.backend.dto.CitizenDto;
+import com.cvrs.backend.dto.CustomDto.FormDto;
 import com.cvrs.backend.dto.CustomDto.ResponseDto;
 import com.cvrs.backend.entity.CitizenEntity;
 import com.cvrs.backend.exception.NotFoundException;
@@ -30,14 +31,25 @@ public class CitizenController extends BaseController {
 
     // Todo: saving all details of citizen in different entity while saving citizen
     @PostMapping
-    public ResponseEntity<ResponseDto> save(@RequestBody CitizenDto citizenDto){
+    public ResponseEntity<ResponseDto> saveAllDetails(@RequestBody FormDto formDto){
+        CitizenDto citizenDto = citizenService.saveAllDetails(formDto);
         try {
             citizenService.save(citizenMapper.mapToEntity(citizenDto));
         }catch (Exception exception){
             throw new NotSavedException("Not saved", exception);
         }
-        return new ResponseEntity<>(new ResponseDto("Successfully saved", citizenDto), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto("Successfully saved", formDto), HttpStatus.OK);
     }
+
+//    @PostMapping
+//    public ResponseEntity<ResponseDto> save(@RequestBody CitizenDto citizenDto){
+//        try {
+//            citizenService.save(citizenMapper.mapToEntity(citizenDto));
+//        }catch (Exception exception){
+//            throw new NotSavedException("Not saved", exception);
+//        }
+//        return new ResponseEntity<>(new ResponseDto("Successfully saved", citizenDto), HttpStatus.OK);
+//    }
 
     @PutMapping
     public ResponseEntity<ResponseDto> update(@RequestBody CitizenDto citizenDto){

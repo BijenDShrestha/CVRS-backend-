@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OccupationRepository extends JpaRepository<OccupationEntity, Long> {
+    OccupationEntity findByName(String occupationName);
 }
