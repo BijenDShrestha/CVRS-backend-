@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class MedicalConditionDto extends BaseDto {
 
-    private boolean serious;
+    private Boolean serious;
 
 }
