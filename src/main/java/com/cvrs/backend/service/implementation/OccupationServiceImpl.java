@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 
 @Transactional
 @Service
-public class OccupationServiceImpl extends BaseServiceImpl<OccupationEntity, Long> implements IOccupationService {
+public class OccupationServiceImpl extends BaseServiceImpl<OccupationEntity, Long> implements com.cvrs.backend.service.IOccupationService {
     private OccupationRepository occupationRepository;
 
     @Autowired

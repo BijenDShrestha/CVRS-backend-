@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VaccineDistributionCenterRepository extends JpaRepository<VaccineDistributionCenterEntity, Long> {
+    VaccineDistributionCenterEntity findByName(String distributionName);
 }

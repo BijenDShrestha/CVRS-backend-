@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 
 @Transactional
 @Service
-public class MedicalConditionServiceImpl extends BaseServiceImpl<MedicalConditionEntity, Long> implements IMedicalConditionService {
+public class MedicalConditionServiceImpl extends BaseServiceImpl<MedicalConditionEntity, Long> implements com.cvrs.backend.service.IMedicalConditionService {
     private MedicalConditionRepository medicalConditionRepository;
 
     @Autowired

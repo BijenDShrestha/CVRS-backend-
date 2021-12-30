@@ -11,6 +11,7 @@ public interface APIConstant {
     static final String MEDICAL_CONDITION = API + "/medical_condition";
     static final String OCCUPATION = API + "/occupation";
     static final String VACCINE_DISTRIBUTION_CENTER = API + "/vaccine_distribution_center";
+    static final String VACCINE_DISTRIBUTION_CENTER_TO_VACCINE = API + "/vaccine_distribution_center_to_vaccine";
 
     /************* Common Controller **************/
     static final String FIND_ALL = "/findAll";

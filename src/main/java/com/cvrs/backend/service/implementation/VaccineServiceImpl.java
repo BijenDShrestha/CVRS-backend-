@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 
 @Transactional
 @Service
-public class VaccineServiceImpl extends BaseServiceImpl<VaccineEntity, Long> implements IVaccineService {
+public class VaccineServiceImpl extends BaseServiceImpl<VaccineEntity, Long> implements com.cvrs.backend.service.IVaccineService {
     private VaccineRepository vaccineRepository;
 
     @Autowired

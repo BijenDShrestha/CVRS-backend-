@@ -18,19 +18,19 @@ import com.cvrs.backend.repository.LocationRepository;
 import com.cvrs.backend.repository.MedicalConditionRepository;
 import com.cvrs.backend.repository.OccupationRepository;
 import com.cvrs.backend.service.ICitizenService;
+import com.cvrs.backend.service.ILocationService;
 import com.cvrs.backend.service.implementation.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Transactional
 @Service
 public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> implements ICitizenService {
     private CitizenRepository citizenRepository;
-    private LocationServiceImpl locationService;
+    private ILocationService locationService;
     private LocationMapper locationMapper;
     private LocationRepository locationRepository;
     private OccupationRepository occupationRepository;
@@ -42,7 +42,7 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
 
     @Autowired
     public CitizenServiceImpl(JpaRepository<CitizenEntity, Long> repository,
-                              CitizenRepository citizenRepository, LocationServiceImpl locationService,
+                              CitizenRepository citizenRepository, ILocationService locationService,
                               LocationMapper locationMapper, LocationRepository locationRepository,
                               OccupationRepository occupationRepository, OccupationMapper occupationMapper,
                               OccupationServiceImpl occupationService, MedicalConditionServiceImpl medicalConditionService,
@@ -77,18 +77,18 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         //check already existed location by ward and municipality
         LocationEntity locationEntity = locationRepository.findByWardNoAndMunicipality(formLocationDto.getWardNo(), formLocationDto.getMunicipality());
         if (locationEntity == null){
-            LocationDto locationDto = new LocationDto();
-            locationDto.setWardNo(formLocationDto.getWardNo());
-            locationDto.setMunicipality(formLocationDto.getMunicipality());
-            locationDto.setDistrict(formLocationDto.getDistrict());
-            locationDto.setZone(formLocationDto.getZone());
-            locationDto.setState(formLocationDto.getState());
+//            LocationDto locationDto = new LocationDto();
+//            locationDto.setWardNo(formLocationDto.getWardNo());
+//            locationDto.setMunicipality(formLocationDto.getMunicipality());
+//            locationDto.setDistrict(formLocationDto.getDistrict());
+//            locationDto.setZone(formLocationDto.getZone());
+//            locationDto.setState(formLocationDto.getState());
 
-            LocationEntity saveLocationEntity = locationMapper.mapToEntity(locationDto);
+            LocationEntity saveLocationEntity = locationMapper.mapToEntity(formLocationDto);
             locationService.save(saveLocationEntity);
 
             //save the location and get the location_id;
-            LocationEntity locationEntityAfterSave = locationRepository.findByWardNoAndMunicipality(locationDto.getWardNo(), locationDto.getMunicipality());
+            LocationEntity locationEntityAfterSave = locationRepository.findByWardNoAndMunicipality(formLocationDto.getWardNo(), formLocationDto.getMunicipality());
             citizenDto.setLocationEntityId(locationEntityAfterSave.getId());
 
         }else{
@@ -99,13 +99,13 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         OccupationDto formOccupationDto = formDto.getOccupationDto();
         OccupationEntity occupationEntity = occupationRepository.findByName(formOccupationDto.getName());
         if(occupationEntity == null){
-            OccupationDto occupationDto = new OccupationDto();
-            occupationDto.setName(formOccupationDto.getName());
+//            OccupationDto occupationDto = new OccupationDto();
+//            occupationDto.setName(formOccupationDto.getName());
 
-            OccupationEntity saveOccupationEntity = occupationMapper.mapToEntity(occupationDto);
+            OccupationEntity saveOccupationEntity = occupationMapper.mapToEntity(formOccupationDto);
             occupationService.save(saveOccupationEntity);
 
-            OccupationEntity occupationEntityAfterSave = occupationRepository.findByName(occupationDto.getName());
+            OccupationEntity occupationEntityAfterSave = occupationRepository.findByName(formOccupationDto.getName());
             citizenDto.setOccupationEntityId(occupationEntityAfterSave.getId());
         }else{
             citizenDto.setOccupationEntityId(occupationEntity.getId());
@@ -116,14 +116,14 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         MedicalConditionDto formMedicalConditionDto = formDto.getMedicalConditionDto();
         MedicalConditionEntity medicalConditionEntity = medicalConditionRepository.findByName(formMedicalConditionDto.getName());
         if(medicalConditionEntity == null){
-            MedicalConditionDto medicalConditionDto = new MedicalConditionDto();
-            medicalConditionDto.setName(formMedicalConditionDto.getName());
-            medicalConditionDto.setSerious(formMedicalConditionDto.getSerious());
+//            MedicalConditionDto medicalConditionDto = new MedicalConditionDto();
+//            medicalConditionDto.setName(formMedicalConditionDto.getName());
+//            medicalConditionDto.setSerious(formMedicalConditionDto.getSerious());
 
-            MedicalConditionEntity saveMedicalConditionEntity = medicalConditionMapper.mapToEntity(medicalConditionDto);
+            MedicalConditionEntity saveMedicalConditionEntity = medicalConditionMapper.mapToEntity(formMedicalConditionDto);
             medicalConditionService.save(saveMedicalConditionEntity);
 
-            MedicalConditionEntity medicalConditionEntityAfterSave = medicalConditionRepository.findByName(medicalConditionDto.getName());
+            MedicalConditionEntity medicalConditionEntityAfterSave = medicalConditionRepository.findByName(formMedicalConditionDto.getName());
             citizenDto.setMedicalConditionEntityId(medicalConditionEntityAfterSave.getId());
         }else{
             citizenDto.setMedicalConditionEntityId(medicalConditionEntity.getId());

@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 
 @Transactional
 @Service
-public class ManufacturingCompanyServiceImpl extends BaseServiceImpl<ManufacturingCompanyEntity, Long> implements IManufacturingCompanyService {
+public class ManufacturingCompanyServiceImpl extends BaseServiceImpl<ManufacturingCompanyEntity, Long> implements com.cvrs.backend.service.IManufacturingCompanyService {
     private ManufacturingCompanyRepository manufacturingCompanyRepository;
 
     @Autowired
