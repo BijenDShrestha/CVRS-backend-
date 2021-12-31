@@ -84,12 +84,15 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
 //            locationDto.setZone(formLocationDto.getZone());
 //            locationDto.setState(formLocationDto.getState());
 
-            LocationEntity saveLocationEntity = locationMapper.mapToEntity(formLocationDto);
-            locationService.save(saveLocationEntity);
-
-            //save the location and get the location_id;
-            LocationEntity locationEntityAfterSave = locationRepository.findByWardNoAndMunicipality(formLocationDto.getWardNo(), formLocationDto.getMunicipality());
-            citizenDto.setLocationEntityId(locationEntityAfterSave.getId());
+//            LocationEntity saveLocationEntity = locationMapper.mapToEntity(formLocationDto);
+//            locationService.save(saveLocationEntity);
+//
+//            //save the location and get the location_id;
+//            LocationEntity locationEntityAfterSave = locationRepository.findByWardNoAndMunicipality(formLocationDto.getWardNo(), formLocationDto.getMunicipality());
+//            citizenDto.setLocationEntityId(locationEntityAfterSave.getId());
+            //or
+            LocationEntity saveLocationEntity = locationRepository.save(locationMapper.mapToEntity(formLocationDto));
+            citizenDto.setLocationEntityId(saveLocationEntity.getId());
 
         }else{
             citizenDto.setLocationEntityId(locationEntity.getId());
@@ -105,8 +108,10 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
             OccupationEntity saveOccupationEntity = occupationMapper.mapToEntity(formOccupationDto);
             occupationService.save(saveOccupationEntity);
 
-            OccupationEntity occupationEntityAfterSave = occupationRepository.findByName(formOccupationDto.getName());
-            citizenDto.setOccupationEntityId(occupationEntityAfterSave.getId());
+//            OccupationEntity occupationEntityAfterSave = occupationRepository.findByName(formOccupationDto.getName());
+//            citizenDto.setOccupationEntityId(occupationEntityAfterSave.getId());
+            //or
+            citizenDto.setOccupationEntityId(occupationRepository.findByName(formOccupationDto.getName()).getId());
         }else{
             citizenDto.setOccupationEntityId(occupationEntity.getId());
         }
