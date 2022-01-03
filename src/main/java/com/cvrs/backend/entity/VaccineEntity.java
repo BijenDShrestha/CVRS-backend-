@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -22,6 +23,9 @@ public class VaccineEntity extends BaseEntity {
 
     @NotNull
     private Long units;
+
+    @Column(name = "schedule_for")
+    private Date scheduleFor;
 
     @NotNull
     @ManyToOne
