@@ -20,6 +20,7 @@ import com.cvrs.backend.repository.OccupationRepository;
 import com.cvrs.backend.service.ICitizenService;
 import com.cvrs.backend.service.ILocationService;
 import com.cvrs.backend.service.implementation.base.BaseServiceImpl;
+import com.cvrs.backend.util.CvrsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -155,16 +156,19 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         Integer age = Period.between(localDob, currentDate).getYears();
 
         if(age <= 12){
-            citizenDto.setAgeCategoryEntityId(Long.parseLong("1"));
+            citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.CHILDREN));
         } else if (age > 12 && age <= 18){
-            citizenDto.setAgeCategoryEntityId(Long.parseLong("2"));
+            citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.TEEN));
         } else if (age > 18 && age <= 40){
-        citizenDto.setAgeCategoryEntityId(Long.parseLong("3"));
+        citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.YOUNG_ADULT));
         } else if (age > 40 && age <= 60){
-            citizenDto.setAgeCategoryEntityId(Long.parseLong("4"));
+            citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.MIDDLE_AGED_ADULT));
         } else {
-            citizenDto.setAgeCategoryEntityId(Long.parseLong("5"));
+            citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.OLD_ADULT));
         }
+
+        //vaccinated status
+        citizenDto.setVaccinatedStatus(CvrsUtils.PENDING);
 
         return citizenDto;
 
