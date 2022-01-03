@@ -9,4 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
         "http://192.168.1.2:3000"
 })
 public class BaseController {
+
 }
