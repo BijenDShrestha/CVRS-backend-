@@ -25,6 +25,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Date;
+
 
 @Transactional
 @Service
@@ -134,7 +140,42 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
             citizenDto.setMedicalConditionEntityId(medicalConditionEntity.getId());
         }
 
+        //set the priority of citizen
+        if(medicalConditionEntity.getName().equalsIgnoreCase("NORMAL") || medicalConditionEntity.getName().equalsIgnoreCase("BLOOD PRESSURE")
+        || medicalConditionEntity.getName().equalsIgnoreCase("DIABETES")){
+            citizenDto.setPriority(false);
+        } else {
+            citizenDto.setPriority(true);
+        }
+
+        //set the age category
+        String dob = dateInString(citizenDto.getDob());
+        LocalDate localDob = LocalDate.parse(dob);
+        LocalDate currentDate = LocalDate.now();
+        Integer age = Period.between(localDob, currentDate).getYears();
+
+        if(age <= 12){
+            citizenDto.setAgeCategoryEntityId(Long.parseLong("1"));
+        } else if (age > 12 && age <= 18){
+            citizenDto.setAgeCategoryEntityId(Long.parseLong("2"));
+        } else if (age > 18 && age <= 40){
+        citizenDto.setAgeCategoryEntityId(Long.parseLong("3"));
+        } else if (age > 40 && age <= 60){
+            citizenDto.setAgeCategoryEntityId(Long.parseLong("4"));
+        } else {
+            citizenDto.setAgeCategoryEntityId(Long.parseLong("5"));
+        }
+
         return citizenDto;
 
     }
+
+
+    public String dateInString(Date date){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(date);
+    }
+
 }
+
+

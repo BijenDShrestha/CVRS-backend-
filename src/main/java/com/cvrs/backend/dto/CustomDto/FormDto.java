@@ -12,5 +12,5 @@ public class FormDto {
     private OccupationDto occupationDto;
     private MedicalConditionDto medicalConditionDto;
 //    private VaccineDto vaccineDto;
-//    private AgeCategoryDto ageCategoryDto;
+    private AgeCategoryDto ageCategoryDto;
 }
