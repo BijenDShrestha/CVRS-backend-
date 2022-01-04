@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -82,4 +83,17 @@ public class VaccineController extends BaseController {
         if(vaccineEntity == null) throw new NotFoundException("Not Found Vaccine Id: " + id);
         return new ResponseEntity<>(new ResponseDto("Successfully fetched", vaccineMapper.mapToDto(vaccineEntity)), HttpStatus.OK);
     }
+
+    @GetMapping(APIConstant.FIND_ALL_WITH_DISTRIBUTION_CENTER)
+    public ResponseEntity<ResponseDto> findAllWithVaccineDistributionCenter(@PathVariable("center") String center){
+        List<VaccineDto> vaccineDtos = new ArrayList<>();
+        vaccineDtos = vaccineService.findAllWithDistributionCenter(center);
+
+        if (vaccineDtos == null){
+            return new ResponseEntity<>(new ResponseDto("No vaccine detail found"), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new ResponseDto("Successfully fetched", vaccineDtos), HttpStatus.OK);
+    }
+
 }

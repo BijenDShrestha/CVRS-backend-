@@ -6,6 +6,7 @@ import com.cvrs.backend.entity.CitizenEntity;
 import com.cvrs.backend.service.base.IBaseService;
 
 import java.util.Date;
+import java.util.List;
 
 public interface ICitizenService extends IBaseService<CitizenEntity, Long> {
 
@@ -13,4 +14,8 @@ public interface ICitizenService extends IBaseService<CitizenEntity, Long> {
 
     String dateInString(Date date);
 
-    }
+    List<CitizenDto> findByStatusCode(String statusCode);
+
+    List<CitizenDto> findByAgeCategory(Long id);
+
+}

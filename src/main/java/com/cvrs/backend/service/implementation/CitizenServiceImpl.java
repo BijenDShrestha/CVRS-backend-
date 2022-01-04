@@ -10,6 +10,7 @@ import com.cvrs.backend.entity.LocationEntity;
 import com.cvrs.backend.entity.MedicalConditionEntity;
 import com.cvrs.backend.entity.OccupationEntity;
 import com.cvrs.backend.exception.AlreadyExistedException;
+import com.cvrs.backend.mapper.CitizenMapper;
 import com.cvrs.backend.mapper.LocationMapper;
 import com.cvrs.backend.mapper.MedicalConditionMapper;
 import com.cvrs.backend.mapper.OccupationMapper;
@@ -30,7 +31,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Transactional
@@ -46,6 +49,7 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
     private MedicalConditionServiceImpl medicalConditionService;
     private MedicalConditionRepository medicalConditionRepository;
     private MedicalConditionMapper medicalConditionMapper;
+    private CitizenMapper citizenMapper;
 
     @Autowired
     public CitizenServiceImpl(JpaRepository<CitizenEntity, Long> repository,
@@ -53,7 +57,8 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
                               LocationMapper locationMapper, LocationRepository locationRepository,
                               OccupationRepository occupationRepository, OccupationMapper occupationMapper,
                               OccupationServiceImpl occupationService, MedicalConditionServiceImpl medicalConditionService,
-                              MedicalConditionRepository medicalConditionRepository, MedicalConditionMapper medicalConditionMapper) {
+                              MedicalConditionRepository medicalConditionRepository, MedicalConditionMapper medicalConditionMapper,
+                              CitizenMapper citizenMapper) {
         super(repository);
         this.citizenRepository = citizenRepository;
         this.locationService = locationService;
@@ -65,6 +70,7 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         this.medicalConditionRepository = medicalConditionRepository;
         this.medicalConditionService = medicalConditionService;
         this.medicalConditionMapper = medicalConditionMapper;
+        this.citizenMapper = citizenMapper;
     }
 
     public CitizenDto saveAllDetails(FormDto formDto){
@@ -178,6 +184,29 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
     public String dateInString(Date date){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(date);
+    }
+
+    @Override
+    public List<CitizenDto> findByStatusCode(String statusCode) {
+        List<CitizenEntity> citizenEntities = new ArrayList<>();
+        citizenEntities = citizenRepository.findAllByVaccinatedStatus(statusCode);
+        if(citizenEntities.size() == 0){
+            return null;
+        }
+        return  citizenMapper.mapToDto(citizenEntities);
+    }
+
+    @Override
+    public List<CitizenDto> findByAgeCategory(Long id){
+
+        List<CitizenEntity> citizenEntities = new ArrayList<>();
+        citizenEntities = citizenRepository.findAllByAgeCategoryEntityId(id);
+
+        if(citizenEntities.size() ==0){
+            return null;
+        }
+
+        return citizenMapper.mapToDto(citizenEntities);
     }
 
 }

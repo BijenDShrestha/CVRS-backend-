@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -94,5 +95,35 @@ public class CitizenController extends BaseController {
         if(citizenEntity == null) throw new NotFoundException("Not Found Citizen Id: " + id);
         return new ResponseEntity<>(new ResponseDto("Successfully Fetched", citizenMapper.mapToDto(citizenEntity)), HttpStatus.OK);
     }
+
+    @GetMapping(APIConstant.FIND_BY_STATUS_CODE)
+    public ResponseEntity<ResponseDto> findByStatusCode(@RequestParam("statusCode") String statusCode){
+
+        List<CitizenDto> citizenDtos = new ArrayList<>();
+        citizenDtos = citizenService.findByStatusCode(statusCode);
+
+        if (citizenDtos == null){
+            return new ResponseEntity<>(new ResponseDto("Citizen with status code " + statusCode + " not found"), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new ResponseDto("Successfully fetched! ", citizenDtos), HttpStatus.OK);
+
+    }
+
+    @GetMapping(APIConstant.FIND_BY_AGE_CATEGORIES)
+    public ResponseEntity<ResponseDto> findByAgeCategorie(@RequestParam("id") Long ageCategory){
+
+        List<CitizenDto> citizenDtos = new ArrayList<>();
+        citizenDtos = citizenService.findByAgeCategory(ageCategory);
+
+        if(citizenDtos == null){
+            return  new ResponseEntity<>(new ResponseDto("Citizen data not found!"), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new ResponseDto("Successfully fetched!", citizenDtos), HttpStatus.NOT_FOUND);
+
+    }
+
+
 
 }

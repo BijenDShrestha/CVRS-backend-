@@ -20,4 +20,12 @@ public interface APIConstant {
     static final String EDIT = "/edit";
     static final String UPDATE = "/update";
 
+    /************ Citizen Controller **********/
+    static final String FIND_BY_STATUS_CODE = "/statusCode";
+    static final String FIND_BY_AGE_CATEGORIES = "/ageCategories";
+
+
+    /*********** Vaccine Controller ***********/
+    static final String FIND_ALL_WITH_DISTRIBUTION_CENTER = "/distributionCenter";
+
 }
