@@ -31,7 +31,7 @@ public class CitizenController extends BaseController {
     }
 
     // Todo: saving all details of citizen in different entity while saving citizen
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<ResponseDto> saveAllDetails(@RequestBody FormDto formDto){
         CitizenDto citizenDto = citizenService.saveAllDetails(formDto);
         try {
@@ -52,7 +52,7 @@ public class CitizenController extends BaseController {
 //        return new ResponseEntity<>(new ResponseDto("Successfully saved", citizenDto), HttpStatus.OK);
 //    }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<ResponseDto> update(@RequestBody CitizenDto citizenDto){
         try {
             citizenService.save(citizenMapper.mapToEntity(citizenDto));
