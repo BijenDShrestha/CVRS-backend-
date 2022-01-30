@@ -23,17 +23,18 @@ public class AdminController extends BaseController {
 
     private IAdminService adminService;
     private AdminMapper adminMapper;
-    private PasswordEncoder encoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminController(IAdminService adminService, AdminMapper adminMapper) {
+    public AdminController(IAdminService adminService, AdminMapper adminMapper, PasswordEncoder passwordEncoder) {
         this.adminService = adminService;
         this.adminMapper = adminMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping
     public ResponseEntity<ResponseDto> save(@RequestBody AdminDto adminDto){
-        adminDto.setPassword(encoder.encode(adminDto.getPassword()));
+        adminDto.setPassword(passwordEncoder.encode(adminDto.getPassword()));
         try {
             adminService.save(adminMapper.mapToEntity(adminDto));
         }catch (Exception exception){
@@ -44,7 +45,7 @@ public class AdminController extends BaseController {
 
     @PutMapping
     public ResponseEntity<ResponseDto> update(@RequestBody AdminDto adminDto){
-        adminDto.setPassword(encoder.encode(adminDto.getPassword()));
+        adminDto.setPassword(passwordEncoder.encode(adminDto.getPassword()));
 
         try {
             adminService.save(adminMapper.mapToEntity(adminDto));
