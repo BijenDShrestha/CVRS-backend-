@@ -29,6 +29,8 @@ public class CitizenDto extends BaseDto {
 
     private Boolean priority;
 
+    private String regNum;
+
     private Long vaccineId;
 
     private Long medicalConditionEntityId;

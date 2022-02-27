@@ -176,6 +176,9 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         //vaccinated status
         citizenDto.setVaccinatedStatus(CvrsUtils.PENDING);
 
+        //Registration Number
+        citizenDto.setRegNum(Long.valueOf(System.currentTimeMillis()).toString());
+
         return citizenDto;
 
     }
