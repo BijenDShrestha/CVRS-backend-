@@ -39,7 +39,7 @@ public class CitizenController extends BaseController {
         }catch (Exception exception){
             throw new NotSavedException("Not saved", exception);
         }
-        return new ResponseEntity<>(new ResponseDto("Successfully saved", formDto), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto("Successfully saved", citizenDto), HttpStatus.OK);
     }
 
 //    @PostMapping
