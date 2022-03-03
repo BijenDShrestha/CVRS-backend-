@@ -1,6 +1,9 @@
 package com.cvrs.backend.service.implementation;
 
 import com.cvrs.backend.dto.CitizenDto;
+import com.cvrs.backend.dto.LocationDto;
+import com.cvrs.backend.dto.VaccineDistributionCenterDto;
+import com.cvrs.backend.dto.VaccineDto;
 import com.cvrs.backend.entity.VaccineEntity;
 import com.cvrs.backend.exception.NotFoundException;
 import com.cvrs.backend.repository.VaccineRepository;
@@ -68,15 +71,17 @@ public class CvrsMailService {
 
 
     @Async
-    public boolean sendNotificationToCitizen(CitizenDto citizenDto) throws MessagingException{
+    public boolean sendNotificationToCitizen(CitizenDto citizenDto, VaccineDto vaccineDto, VaccineDistributionCenterDto vaccineDistributionCenterDto, LocationDto locationDto) throws MessagingException{
         if(citizenDto.getEmail() == null){
             throw new NotFoundException("Email Address not Found!");
         }
         Context context = new Context();
         context.setVariable("title", "Dear " + citizenDto.getFirstName() + citizenDto.getLastName() + ",");
-        VaccineEntity vaccineEntity = vaccineRepository.findById(citizenDto.getVaccineId()).get();
+//        VaccineEntity vaccineEntity = vaccineRepository.findById(citizenDto.getVaccineId()).get();
+
         //Todo: check the units of vaccine and distribute it evenly for date schedule
-        context.setVariable("body", "Your vaccination Date is: " + vaccineEntity.getScheduleFor().toString());
+        context.setVariable("body", "Your vaccination Date is: " + vaccineDto.getScheduleFor().toString() + ". Your vaccination center is: "
+        + vaccineDistributionCenterDto.getName() + " And its location is: " + locationDto.getMunicipality() + "-" + locationDto.getWardNo() + ", " + locationDto.getDistrict());
         String body = templateEngine.process("notification_template", context);
 
         return SendMail(citizenDto, body, "Vaccine Notification");

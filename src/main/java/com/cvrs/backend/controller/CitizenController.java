@@ -111,7 +111,7 @@ public class CitizenController extends BaseController {
     }
 
     @GetMapping(APIConstant.FIND_BY_AGE_CATEGORIES)
-    public ResponseEntity<ResponseDto> findByAgeCategorie(@RequestParam("id") Long ageCategory){
+    public ResponseEntity<ResponseDto> findByAgeCategory(@RequestParam("id") Long ageCategory){
 
         List<CitizenDto> citizenDtos = new ArrayList<>();
         citizenDtos = citizenService.findByAgeCategory(ageCategory);
@@ -122,6 +122,15 @@ public class CitizenController extends BaseController {
 
         return new ResponseEntity<>(new ResponseDto("Successfully fetched!", citizenDtos), HttpStatus.NOT_FOUND);
 
+    }
+
+//    @GetMapping("/municipality/{municipality}") for pathVariable
+    @GetMapping("/municipality")
+    public ResponseEntity<ResponseDto> getCitizen(@RequestParam("municipality") String municipality, @RequestParam("wardNo") Integer wardNO) {
+        List<CitizenDto> citizenDtos = new ArrayList<>();
+//        citizenDtos = citizenService.findAllByMunicipality(municipality);
+        citizenDtos = citizenService.findAllByMunicipality(municipality, wardNO);
+        return new ResponseEntity<>(new ResponseDto("Successfully fetched!", citizenDtos), HttpStatus.NOT_FOUND);
     }
 
 

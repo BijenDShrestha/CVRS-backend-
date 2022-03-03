@@ -18,4 +18,6 @@ public interface ICitizenService extends IBaseService<CitizenEntity, Long> {
 
     List<CitizenDto> findByAgeCategory(Long id);
 
+    List<CitizenDto> findAllByMunicipality(String municipality, Integer wardNo);
+
 }

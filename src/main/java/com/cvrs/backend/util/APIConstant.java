@@ -4,6 +4,7 @@ public interface APIConstant {
     static final String API = "/api/cvrs";
 
     static final String ADMIN = API + "/admin";
+    static final String AGE_CATEGORY = API + "/ageCategory";
     static final String CITIZEN = API + "/citizen";
     static final String VACCINE = API + "/vaccine";
     static final String LOCATION = API + "/location";

@@ -12,11 +12,11 @@ import javax.transaction.Transactional;
 
 @Transactional
 @Service
-public class IManufacturingCompanyService extends BaseServiceImpl<ManufacturingCompanyEntity, Long> implements com.cvrs.backend.service.IManufacturingCompanyService {
+public class ManufacturingCompanyServiceImpl extends BaseServiceImpl<ManufacturingCompanyEntity, Long> implements com.cvrs.backend.service.IManufacturingCompanyService {
     private ManufacturingCompanyRepository manufacturingCompanyRepository;
 
     @Autowired
-    public IManufacturingCompanyService(JpaRepository<ManufacturingCompanyEntity, Long> repository, ManufacturingCompanyRepository manufacturingCompanyRepository) {
+    public ManufacturingCompanyServiceImpl(JpaRepository<ManufacturingCompanyEntity, Long> repository, ManufacturingCompanyRepository manufacturingCompanyRepository) {
         super(repository);
         this.manufacturingCompanyRepository = manufacturingCompanyRepository;
     }

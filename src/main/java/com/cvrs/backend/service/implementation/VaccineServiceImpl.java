@@ -21,16 +21,16 @@ import java.util.List;
 
 @Transactional
 @Service
-public class IVaccineService extends BaseServiceImpl<VaccineEntity, Long> implements com.cvrs.backend.service.IVaccineService {
+public class VaccineServiceImpl extends BaseServiceImpl<VaccineEntity, Long> implements com.cvrs.backend.service.IVaccineService {
     private VaccineRepository vaccineRepository;
     private VaccineDistributionCenterToVaccineRepository vaccineDistributionCenterToVaccineRepository;
     private VaccineDistributionCenterRepository vaccineDistributionCenterRepository;
     private VaccineMapper vaccineMapper;
 
     @Autowired
-    public IVaccineService(JpaRepository<VaccineEntity, Long> repository, VaccineRepository vaccineRepository , VaccineDistributionCenterToVaccineRepository vaccineDistributionCenterToVaccineRepository,
-                           VaccineDistributionCenterRepository vaccineDistributionCenterRepository,
-                           VaccineMapper vaccineMapper) {
+    public VaccineServiceImpl(JpaRepository<VaccineEntity, Long> repository, VaccineRepository vaccineRepository , VaccineDistributionCenterToVaccineRepository vaccineDistributionCenterToVaccineRepository,
+                              VaccineDistributionCenterRepository vaccineDistributionCenterRepository,
+                              VaccineMapper vaccineMapper) {
         super(repository);
         this.vaccineRepository = vaccineRepository;
         this.vaccineDistributionCenterToVaccineRepository = vaccineDistributionCenterToVaccineRepository;

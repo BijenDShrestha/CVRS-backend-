@@ -20,6 +20,8 @@ import com.cvrs.backend.repository.MedicalConditionRepository;
 import com.cvrs.backend.repository.OccupationRepository;
 import com.cvrs.backend.service.ICitizenService;
 import com.cvrs.backend.service.ILocationService;
+import com.cvrs.backend.service.IMedicalConditionService;
+import com.cvrs.backend.service.IOccupationService;
 import com.cvrs.backend.service.implementation.base.BaseServiceImpl;
 import com.cvrs.backend.util.CvrsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +47,8 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
     private LocationRepository locationRepository;
     private OccupationRepository occupationRepository;
     private OccupationMapper occupationMapper;
-    private OccupationServiceImpl occupationService;
-    private MedicalConditionServiceImpl medicalConditionService;
+    private IOccupationService occupationService;
+    private IMedicalConditionService medicalConditionService;
     private MedicalConditionRepository medicalConditionRepository;
     private MedicalConditionMapper medicalConditionMapper;
     private CitizenMapper citizenMapper;
@@ -56,7 +58,7 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
                               CitizenRepository citizenRepository, ILocationService locationService,
                               LocationMapper locationMapper, LocationRepository locationRepository,
                               OccupationRepository occupationRepository, OccupationMapper occupationMapper,
-                              OccupationServiceImpl occupationService, MedicalConditionServiceImpl medicalConditionService,
+                              IOccupationService occupationService, IMedicalConditionService medicalConditionService,
                               MedicalConditionRepository medicalConditionRepository, MedicalConditionMapper medicalConditionMapper,
                               CitizenMapper citizenMapper) {
         super(repository);
@@ -169,8 +171,10 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.YOUNG_ADULT));
         } else if (age > 40 && age <= 60){
             citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.MIDDLE_AGED_ADULT));
-        } else {
+        } else if (age > 61 && age <= 120){
             citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.OLD_ADULT));
+        } else {
+            citizenDto.setAgeCategoryEntityId(null);
         }
 
         //vaccinated status
@@ -211,6 +215,13 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
 
         return citizenMapper.mapToDto(citizenEntities);
     }
+
+    @Override
+    public List<CitizenDto> findAllByMunicipality(String municipality, Integer wardNo) {
+//        return citizenMapper.mapToDto(citizenRepository.findAllByLocationEntityMunicipalityAndVaccinatedStatus(municipality, "pending"));
+        return citizenMapper.mapToDto(citizenRepository.findAllByLocationEntityMunicipalityAndLocationEntityWardNoAndVaccinatedStatusAndAgeCategoryEntityId(municipality, wardNo, "pending", 1L));
+    }
+
 
 }
 

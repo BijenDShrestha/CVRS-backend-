@@ -15,4 +15,5 @@ public class VaccineFormDto {
     private LocationDto companyLocationDto;
     private VaccineDistributionCenterDto vaccineDistributionCenterDto;
     private LocationDto centerLocationDto;
+    private Long ageCategory;
 }
