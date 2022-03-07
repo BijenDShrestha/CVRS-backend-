@@ -33,9 +33,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter jwtRequestFilter;
 
     private final static String[] AUTH_WHITELIST = {
-            "/authenticate",
+            "/api/cvrs/authenticate",
             "/api/cvrs/citizen/register",
-            "/api/cvrs/citizen/update"
+            "/api/cvrs/citizen/update",
+            "/api/cvrs/admin",
+            "/api/cvrs/admin/test"
     };
 
 //    @Autowired
@@ -53,6 +55,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.cors();
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
