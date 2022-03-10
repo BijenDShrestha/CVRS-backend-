@@ -24,6 +24,7 @@ public interface APIConstant {
     /************ Citizen Controller **********/
     static final String FIND_BY_STATUS_CODE = "/statusCode";
     static final String FIND_BY_AGE_CATEGORIES = "/ageCategories";
+    static final String GET_VACCINE_REPORT = "/vaccinationReport/{registrationNumber}";
 
 
     /*********** Vaccine Controller ***********/

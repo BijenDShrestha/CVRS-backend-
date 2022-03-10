@@ -1,31 +1,21 @@
 package com.cvrs.backend.service.implementation;
 
-import com.cvrs.backend.dto.CitizenDto;
+import com.cvrs.backend.dto.*;
+import com.cvrs.backend.dto.CustomDto.DashboardCustomDto;
 import com.cvrs.backend.dto.CustomDto.FormDto;
-import com.cvrs.backend.dto.LocationDto;
-import com.cvrs.backend.dto.MedicalConditionDto;
-import com.cvrs.backend.dto.OccupationDto;
-import com.cvrs.backend.entity.CitizenEntity;
-import com.cvrs.backend.entity.LocationEntity;
-import com.cvrs.backend.entity.MedicalConditionEntity;
-import com.cvrs.backend.entity.OccupationEntity;
+import com.cvrs.backend.dto.CustomDto.VaccineRegisterDto;
+import com.cvrs.backend.dto.CustomDto.VaccineReportCustomDto;
+import com.cvrs.backend.entity.*;
 import com.cvrs.backend.exception.AlreadyExistedException;
-import com.cvrs.backend.mapper.CitizenMapper;
-import com.cvrs.backend.mapper.LocationMapper;
-import com.cvrs.backend.mapper.MedicalConditionMapper;
-import com.cvrs.backend.mapper.OccupationMapper;
-import com.cvrs.backend.repository.CitizenRepository;
-import com.cvrs.backend.repository.LocationRepository;
-import com.cvrs.backend.repository.MedicalConditionRepository;
-import com.cvrs.backend.repository.OccupationRepository;
-import com.cvrs.backend.service.ICitizenService;
-import com.cvrs.backend.service.ILocationService;
-import com.cvrs.backend.service.IMedicalConditionService;
-import com.cvrs.backend.service.IOccupationService;
+import com.cvrs.backend.mapper.*;
+import com.cvrs.backend.repository.*;
+import com.cvrs.backend.service.*;
 import com.cvrs.backend.service.implementation.base.BaseServiceImpl;
+import com.cvrs.backend.util.APIConstant;
 import com.cvrs.backend.util.CvrsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,9 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Transactional
@@ -52,6 +40,10 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
     private MedicalConditionRepository medicalConditionRepository;
     private MedicalConditionMapper medicalConditionMapper;
     private CitizenMapper citizenMapper;
+    private VaccineRepository vaccineRepository;
+    private VaccineMapper vaccineMapper;
+    private ICitizenService iCitizenService;
+    private IVaccineService vaccineService;
 
     @Autowired
     public CitizenServiceImpl(JpaRepository<CitizenEntity, Long> repository,
@@ -60,7 +52,10 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
                               OccupationRepository occupationRepository, OccupationMapper occupationMapper,
                               IOccupationService occupationService, IMedicalConditionService medicalConditionService,
                               MedicalConditionRepository medicalConditionRepository, MedicalConditionMapper medicalConditionMapper,
-                              CitizenMapper citizenMapper) {
+                              CitizenMapper citizenMapper,
+                              VaccineRepository vaccineRepository,
+                              VaccineMapper vaccineMapper,
+                              IVaccineService vaccineService) {
         super(repository);
         this.citizenRepository = citizenRepository;
         this.locationService = locationService;
@@ -73,6 +68,8 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         this.medicalConditionService = medicalConditionService;
         this.medicalConditionMapper = medicalConditionMapper;
         this.citizenMapper = citizenMapper;
+        this.vaccineMapper = vaccineMapper;
+        this.vaccineService = vaccineService;
     }
 
     public CitizenDto saveAllDetails(FormDto formDto){
@@ -145,6 +142,7 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
 
             MedicalConditionEntity medicalConditionEntityAfterSave = medicalConditionRepository.findByName(formMedicalConditionDto.getName());
             citizenDto.setMedicalConditionEntityId(medicalConditionEntityAfterSave.getId());
+            medicalConditionEntity = medicalConditionEntityAfterSave;
         }else{
             citizenDto.setMedicalConditionEntityId(medicalConditionEntity.getId());
         }
@@ -220,6 +218,99 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
     public List<CitizenDto> findAllByMunicipality(String municipality, Integer wardNo) {
 //        return citizenMapper.mapToDto(citizenRepository.findAllByLocationEntityMunicipalityAndVaccinatedStatus(municipality, "pending"));
         return citizenMapper.mapToDto(citizenRepository.findAllByLocationEntityMunicipalityAndLocationEntityWardNoAndVaccinatedStatusAndAgeCategoryEntityId(municipality, wardNo, "pending", 1L));
+    }
+
+    @Override
+    public List<DashboardCustomDto> findAllCitizenDetailsForDashboard() {
+        List<DashboardCustomDto> dashboardCustomDtos = new ArrayList<>();
+
+        List<CitizenEntity> citizenEntities = citizenRepository.findAll();
+        for (CitizenEntity citizenEntity:
+             citizenEntities) {
+            DashboardCustomDto dto = new DashboardCustomDto();
+            // citizen
+            dto.setFirstName(citizenEntity.getFirstName());
+            dto.setLastName(citizenEntity.getLastName());
+            dto.setCitizenship(citizenEntity.getCitizenship());
+            dto.setAgeCategory(citizenEntity.getAgeCategoryEntity().getName());
+            dto.setDob(getDateOnly(citizenEntity.getDob()));
+            dto.setEmail(citizenEntity.getEmail());
+            dto.setGender(citizenEntity.getGender());
+            dto.setPhoneNum(citizenEntity.getPhoneNum());
+            dto.setVaccinatedStatus(citizenEntity.getVaccinatedStatus());
+            dto.setRegNum(citizenEntity.getRegNum());
+
+            //locaiton
+            dto.setDistrict(citizenEntity.getLocationEntity().getDistrict());
+            dto.setState(citizenEntity.getLocationEntity().getState());
+            dto.setZone(citizenEntity.getLocationEntity().getZone());
+            dto.setMunicipality(citizenEntity.getLocationEntity().getMunicipality());
+            dto.setWardNo(citizenEntity.getLocationEntity().getWardNo());
+
+            // occupatoin medical condition and age ctegorh
+            dto.setOccupation(citizenEntity.getOccupationEntity().getName());
+            dto.setMedicalCondition(citizenEntity.getMedicalConditionEntity().getName());
+            dto.setAgeCategory(citizenEntity.getAgeCategoryEntity().getName());
+
+            dashboardCustomDtos.add(dto);
+
+
+        }
+
+        if(dashboardCustomDtos.size() != 0) {
+            return dashboardCustomDtos;
+        }
+        return null;
+    }
+
+    @Override
+    public CitizenEntity findByCitizenship(String citizenship) {
+        CitizenEntity citizenEntity = new CitizenEntity();
+        citizenEntity =  citizenRepository.findByCitizenshipEquals(citizenship);
+        if(citizenEntity.getCitizenship() != null) {
+            return citizenEntity;
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<CitizenEntity> findByRegistrationNumber(Long registrationNumber) {
+        List<CitizenEntity> citizenEntities = citizenRepository.findAllByRegNum(registrationNumber.toString());
+        if (citizenEntities.isEmpty()) {
+            return null;
+        }
+
+        return citizenEntities;
+
+    }
+
+    @Override
+    public Map<String, Object> generateRegistrationReport(CitizenDto citizenDto) {
+        Map<String, Object> objectMap = new HashMap<>();
+
+        if (citizenDto.getVaccinatedStatus().equalsIgnoreCase(CvrsUtils.PENDING)) {
+            objectMap.put("-1",citizenDto);
+            return objectMap;
+        }
+        if(citizenDto.getVaccinatedStatus().equalsIgnoreCase(CvrsUtils.GOT_ONE)) {
+            VaccineEntity vaccineEntity = vaccineRepository.findById(citizenDto.getVaccineId()).get();
+            VaccineDto vaccineDto = vaccineMapper.mapToDto(vaccineEntity);
+            VaccineReportCustomDto reportCustomDto = new VaccineReportCustomDto(citizenDto, vaccineDto);
+
+            objectMap.put("-2", reportCustomDto);
+
+            return objectMap;
+        }
+
+        objectMap.put("-3", new VaccineReportCustomDto(citizenDto,vaccineMapper.mapToDto(vaccineRepository.findById(citizenDto.getVaccineId()).get())));
+
+        return objectMap;
+    }
+
+    private String getDateOnly(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(date);
     }
 
 

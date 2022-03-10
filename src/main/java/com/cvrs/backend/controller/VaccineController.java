@@ -2,11 +2,18 @@ package com.cvrs.backend.controller;
 
 import com.cvrs.backend.controller.base.BaseController;
 import com.cvrs.backend.dto.CustomDto.ResponseDto;
+import com.cvrs.backend.dto.CustomDto.VaccineRegisterDto;
 import com.cvrs.backend.dto.VaccineDto;
+import com.cvrs.backend.entity.LocationEntity;
+import com.cvrs.backend.entity.ManufacturingCompanyEntity;
 import com.cvrs.backend.entity.VaccineEntity;
 import com.cvrs.backend.exception.NotFoundException;
 import com.cvrs.backend.exception.NotSavedException;
+import com.cvrs.backend.mapper.LocationMapper;
+import com.cvrs.backend.mapper.ManufacturingCompanyMapper;
 import com.cvrs.backend.mapper.VaccineMapper;
+import com.cvrs.backend.service.ILocationService;
+import com.cvrs.backend.service.IManufacturingCompanyService;
 import com.cvrs.backend.service.IVaccineService;
 import com.cvrs.backend.util.APIConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +29,10 @@ import java.util.List;
 public class VaccineController extends BaseController {
     private IVaccineService vaccineService;
     private VaccineMapper vaccineMapper;
+    private LocationMapper locationMapper;
+    private ILocationService locationService;
+    private ManufacturingCompanyMapper manufacturingCompanyMapper;
+    private IManufacturingCompanyService manufacturingCompanyService;
 
     @Autowired
     public VaccineController(IVaccineService vaccineService, VaccineMapper vaccineMapper) {
@@ -29,11 +40,15 @@ public class VaccineController extends BaseController {
         this.vaccineMapper = vaccineMapper;
     }
 
-    //Todo: save its manufacturing company details
+//    Todo: save its manufacturing company details
     @PostMapping
-    public ResponseEntity<ResponseDto> save(@RequestBody VaccineDto vaccineDto){
+    public ResponseEntity<ResponseDto> save(@RequestBody VaccineRegisterDto vaccineDto){
         try {
-            vaccineService.save(vaccineMapper.mapToEntity(vaccineDto));
+            LocationEntity manufacturingCompanyLocationEntity = locationService.save(locationMapper.mapToEntity(vaccineDto.getManufacturingCompanyLocationDto()));
+            vaccineDto.getManufacturingCompanyDto().setLocationEntityId(manufacturingCompanyLocationEntity.getId());
+            ManufacturingCompanyEntity manufacturingCompanyEntity = manufacturingCompanyService.save(manufacturingCompanyMapper.mapToEntity(vaccineDto.getManufacturingCompanyDto()));
+            vaccineDto.getVaccineDto().setManufacturingCompanyEntityId(manufacturingCompanyEntity.getId());
+            vaccineService.save(vaccineMapper.mapToEntity(vaccineDto.getVaccineDto()));
         }catch (Exception exception){
             throw new NotSavedException("Not Saved", exception);
         }

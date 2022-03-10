@@ -36,8 +36,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
             "/api/cvrs/authenticate",
             "/api/cvrs/citizen/register",
             "/api/cvrs/citizen/update",
-            "/api/cvrs/admin",
-            "/api/cvrs/admin/test"
+//            "/api/cvrs/admin",
+            "/api/cvrs/admin/test",
+            "/api/cvrs/citizen/vaccinationReport/{registrationNumber}"
     };
 
 //    @Autowired

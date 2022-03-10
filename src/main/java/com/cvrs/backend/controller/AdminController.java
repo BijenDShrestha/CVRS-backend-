@@ -1,8 +1,10 @@
 package com.cvrs.backend.controller;
 
 import com.cvrs.backend.controller.base.BaseController;
-import com.cvrs.backend.dto.AdminDto;
+import com.cvrs.backend.dto.*;
 import com.cvrs.backend.dto.CustomDto.ResponseDto;
+import com.cvrs.backend.dto.CustomDto.VaccineFormDto;
+import com.cvrs.backend.dto.CustomDto.VaccineRegisterDto;
 import com.cvrs.backend.entity.AdminEntity;
 import com.cvrs.backend.exception.NotFoundException;
 import com.cvrs.backend.exception.NotSavedException;
@@ -87,5 +89,20 @@ public class AdminController extends BaseController {
         List<AdminEntity> adminEntityList = adminService.findAll();
         if (adminEntityList == null) throw new NotFoundException("Empty List");
         return new ResponseEntity<>(new ResponseDto("Successfully fetched", adminMapper.mapToDto(adminEntityList)), HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<ResponseDto> testAPI() {
+        VaccineFormDto formDto = new VaccineFormDto();
+        formDto.setVaccineDistributionCenterDto(new VaccineDistributionCenterDto());
+        formDto.setVaccineDto(new VaccineDto());
+        formDto.setCompanyLocationDto(new LocationDto());
+        formDto.setAgeCategory(1L);
+        formDto.setCenterLocationDto(new LocationDto());
+        formDto.setManufacturingCompanyDto(new ManufacturingCompanyDto());
+//        formDto.setManufacturingCompanyDto(new ManufacturingCompanyDto());
+//        formDto.setVaccineDistributionCenterDto(new VaccineDistributionCenterDto());
+
+        return new ResponseEntity<>(new ResponseDto("test", formDto), HttpStatus.OK);
     }
 }

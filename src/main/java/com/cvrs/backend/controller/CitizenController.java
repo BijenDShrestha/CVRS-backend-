@@ -2,6 +2,8 @@ package com.cvrs.backend.controller;
 
 import com.cvrs.backend.controller.base.BaseController;
 import com.cvrs.backend.dto.CitizenDto;
+import com.cvrs.backend.dto.CustomDto.ChangeDto;
+import com.cvrs.backend.dto.CustomDto.DashboardCustomDto;
 import com.cvrs.backend.dto.CustomDto.FormDto;
 import com.cvrs.backend.dto.CustomDto.ResponseDto;
 import com.cvrs.backend.entity.CitizenEntity;
@@ -9,7 +11,9 @@ import com.cvrs.backend.exception.NotFoundException;
 import com.cvrs.backend.exception.NotSavedException;
 import com.cvrs.backend.mapper.CitizenMapper;
 import com.cvrs.backend.service.ICitizenService;
+import com.cvrs.backend.service.IVaccineService;
 import com.cvrs.backend.util.APIConstant;
+import com.cvrs.backend.util.CvrsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,25 +21,35 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(APIConstant.CITIZEN)
 public class CitizenController extends BaseController {
     private CitizenMapper citizenMapper;
     private ICitizenService citizenService;
+    private IVaccineService vaccineService;
 
     @Autowired
-    public CitizenController(CitizenMapper citizenMapper, ICitizenService citizenService) {
+    public CitizenController(CitizenMapper citizenMapper, ICitizenService citizenService , IVaccineService vaccineService) {
         this.citizenMapper = citizenMapper;
         this.citizenService = citizenService;
+        this.vaccineService = vaccineService;
+
     }
 
     // Todo: saving all details of citizen in different entity while saving citizen
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> saveAllDetails(@RequestBody FormDto formDto){
+        if(formDto.getCitizenDto() == null || formDto.getLocationDto() == null) {
+//            throw new NotFoundException("Data cannot be empty!");
+            return new ResponseEntity<>(new ResponseDto("Data empty"),HttpStatus.OK);
+        }
         CitizenDto citizenDto = citizenService.saveAllDetails(formDto);
         try {
-            citizenService.save(citizenMapper.mapToEntity(citizenDto));
+            CitizenEntity citizenEntity = citizenMapper.mapToEntity(citizenDto);
+            System.out.println(citizenEntity);
+            citizenService.save(citizenEntity);
         }catch (Exception exception){
             throw new NotSavedException("Not saved", exception);
         }
@@ -133,6 +147,47 @@ public class CitizenController extends BaseController {
         return new ResponseEntity<>(new ResponseDto("Successfully fetched!", citizenDtos), HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/dashboard")
+    public ResponseEntity<ResponseDto> getDashboardDetails() {
+        List<DashboardCustomDto> dashboardCustomDtos = citizenService.findAllCitizenDetailsForDashboard();
+        if(dashboardCustomDtos == null) {
+            return new ResponseEntity<>(new ResponseDto("No citizen record found!"), HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(new ResponseDto("Successfully fetched!", dashboardCustomDtos), HttpStatus.OK);
+    }
+    @PostMapping("/changeVaccinatedStatus")
+    public ResponseEntity<ResponseDto> changeVaccineStatus(@RequestBody ChangeDto dto) {
+
+        CitizenEntity citizenEntity = citizenService.findByCitizenship(dto.getCitizenship());
+        if(citizenEntity == null) {
+            return new ResponseEntity<>(new ResponseDto("Citizen not found"), HttpStatus.NO_CONTENT);
+        }
+        citizenEntity.setVaccinatedStatus(dto.getVaccinatedStatus());
+        if(dto.getVaccineId() != null) {
+            citizenEntity.setVaccineEntity(vaccineService.findById(dto.getVaccineId()));
+        }
+        citizenService.save(citizenEntity);
+        return new ResponseEntity<>(new ResponseDto("Vaccinated status successfully changed"), HttpStatus.OK);
+    }
+
+    @GetMapping(APIConstant.GET_VACCINE_REPORT)
+    public ResponseEntity<ResponseDto> getVaccineReport(@PathVariable("registrationNumber") Long registrationNumber) {
+
+        System.out.println(registrationNumber);
+        List<CitizenDto> citizenDtos = citizenMapper.mapToDto(citizenService.findByRegistrationNumber(registrationNumber));
+
+        if (citizenDtos == null) {
+            return new ResponseEntity<>(new ResponseDto("Registration number not found"), HttpStatus.NOT_FOUND);
+        }
+        Map<String , Object> objectMap = citizenService.generateRegistrationReport(citizenDtos.get(0));
+        if(objectMap.get("-1") != null) {
+            return new ResponseEntity<>(new ResponseDto("Citizen did not get any vaccine", objectMap.get("-1")), HttpStatus.OK);
+        } else if (objectMap.get("-2") != null){
+            return new ResponseEntity<>(new ResponseDto("Successfully fetched", objectMap.get("-2")), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new ResponseDto("Successfully fetched!", objectMap.get("-3")), HttpStatus.OK);
+    }
 
 
 }

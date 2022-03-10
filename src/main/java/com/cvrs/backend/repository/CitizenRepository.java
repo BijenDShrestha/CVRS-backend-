@@ -27,4 +27,6 @@ public interface CitizenRepository extends JpaRepository<CitizenEntity, Long> {
     @Query("select c from CitizenEntity c where c.locationEntity.municipality = ?1 and c.locationEntity.wardNo = ?2 and c.priority = ?3 and c.vaccinatedStatus = ?4 and c.ageCategoryEntity.id = ?5")
     List<CitizenEntity> findAllByLocationEntityMunicipalityAndLocationEntityWardNoAndPriorityAndVaccinatedStatusAndAgeCategoryEntityId(String municipality, Integer wardNo, Boolean priority, String status, Long ageCategoryId);
 
+    List<CitizenEntity> findAllByRegNum(String registrationNumber);
+
 }
