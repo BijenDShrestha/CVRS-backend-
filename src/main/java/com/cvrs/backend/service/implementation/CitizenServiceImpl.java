@@ -7,6 +7,7 @@ import com.cvrs.backend.dto.CustomDto.VaccineRegisterDto;
 import com.cvrs.backend.dto.CustomDto.VaccineReportCustomDto;
 import com.cvrs.backend.entity.*;
 import com.cvrs.backend.exception.AlreadyExistedException;
+import com.cvrs.backend.exception.NotFoundException;
 import com.cvrs.backend.mapper.*;
 import com.cvrs.backend.repository.*;
 import com.cvrs.backend.service.*;
@@ -294,7 +295,13 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
             return objectMap;
         }
         if(citizenDto.getVaccinatedStatus().equalsIgnoreCase(CvrsUtils.GOT_ONE)) {
-            VaccineEntity vaccineEntity = vaccineRepository.findById(citizenDto.getVaccineId()).get();
+            VaccineEntity vaccineEntity = new VaccineEntity();
+            if(vaccineRepository.findById(citizenDto.getVaccineId()).isPresent()) {
+                vaccineEntity = vaccineRepository.findById(citizenDto.getVaccineId()).get();
+            } else {
+                throw new NotFoundException("Vaccine details not found");
+            }
+
             VaccineDto vaccineDto = vaccineMapper.mapToDto(vaccineEntity);
             VaccineReportCustomDto reportCustomDto = new VaccineReportCustomDto(citizenDto, vaccineDto);
 

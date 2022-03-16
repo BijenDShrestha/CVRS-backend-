@@ -7,6 +7,7 @@ import com.cvrs.backend.dto.CustomDto.DashboardCustomDto;
 import com.cvrs.backend.dto.CustomDto.FormDto;
 import com.cvrs.backend.dto.CustomDto.ResponseDto;
 import com.cvrs.backend.entity.CitizenEntity;
+import com.cvrs.backend.entity.VaccineEntity;
 import com.cvrs.backend.exception.NotFoundException;
 import com.cvrs.backend.exception.NotSavedException;
 import com.cvrs.backend.mapper.CitizenMapper;
@@ -164,7 +165,11 @@ public class CitizenController extends BaseController {
         }
         citizenEntity.setVaccinatedStatus(dto.getVaccinatedStatus());
         if(dto.getVaccineId() != null) {
-            citizenEntity.setVaccineEntity(vaccineService.findById(dto.getVaccineId()));
+            VaccineEntity vaccineEntity = vaccineService.findById(dto.getVaccineId());
+            citizenEntity.setVaccineEntity(vaccineEntity);
+            vaccineEntity.setUnits(vaccineEntity.getUnits()-1L);
+            vaccineService.save(vaccineEntity);
+
         }
         citizenService.save(citizenEntity);
         return new ResponseEntity<>(new ResponseDto("Vaccinated status successfully changed"), HttpStatus.OK);
