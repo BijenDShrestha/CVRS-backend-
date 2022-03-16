@@ -6,6 +6,7 @@ import com.cvrs.backend.dto.CustomDto.ChangeDto;
 import com.cvrs.backend.dto.CustomDto.DashboardCustomDto;
 import com.cvrs.backend.dto.CustomDto.FormDto;
 import com.cvrs.backend.dto.CustomDto.ResponseDto;
+import com.cvrs.backend.dto.VaccineDto;
 import com.cvrs.backend.entity.CitizenEntity;
 import com.cvrs.backend.entity.VaccineEntity;
 import com.cvrs.backend.exception.NotFoundException;
@@ -158,6 +159,12 @@ public class CitizenController extends BaseController {
     }
     @PostMapping("/changeVaccinatedStatus")
     public ResponseEntity<ResponseDto> changeVaccineStatus(@RequestBody ChangeDto dto) {
+
+        VaccineEntity checkVaccine = vaccineService.findById(dto.getVaccineId());
+
+        if(checkVaccine == null || checkVaccine.getUnits() == 0) {
+            throw new NotFoundException("Vaccine quantity is not available or vaccine does not exits !!");
+        }
 
         CitizenEntity citizenEntity = citizenService.findByCitizenship(dto.getCitizenship());
         if(citizenEntity == null) {
