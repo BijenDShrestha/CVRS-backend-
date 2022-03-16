@@ -164,13 +164,13 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
 
         if(age <= 12){
             citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.CHILDREN));
-        } else if (age > 12 && age <= 18){
+        } else if (age >= 13 && age <= 18){
             citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.TEEN));
-        } else if (age > 18 && age <= 40){
+        } else if (age >= 19 && age <= 40){
         citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.YOUNG_ADULT));
-        } else if (age > 40 && age <= 60){
+        } else if (age >= 41 && age <= 60){
             citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.MIDDLE_AGED_ADULT));
-        } else if (age > 61 && age <= 120){
+        } else if (age >= 61 && age <= 120){
             citizenDto.setAgeCategoryEntityId(Long.parseLong(CvrsUtils.OLD_ADULT));
         } else {
             citizenDto.setAgeCategoryEntityId(null);
