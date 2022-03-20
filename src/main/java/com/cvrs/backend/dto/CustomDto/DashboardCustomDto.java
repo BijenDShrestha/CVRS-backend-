@@ -53,4 +53,9 @@ public class DashboardCustomDto {
 
     private String ageCategory;
 
+    // vaccine details
+    private Long vaccineId;
+
+    private String vaccineName;
+
 }

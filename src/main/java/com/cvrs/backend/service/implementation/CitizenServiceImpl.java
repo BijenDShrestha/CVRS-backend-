@@ -253,6 +253,12 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
             dto.setMedicalCondition(citizenEntity.getMedicalConditionEntity().getName());
             dto.setAgeCategory(citizenEntity.getAgeCategoryEntity().getName());
 
+            // vaccine detail
+            if(citizenEntity.getVaccineEntity().getId() != null) {
+                dto.setVaccineId(citizenEntity.getVaccineEntity().getId());
+                dto.setVaccineName(citizenEntity.getVaccineEntity().getName());
+            }
+
             dashboardCustomDtos.add(dto);
 
 
