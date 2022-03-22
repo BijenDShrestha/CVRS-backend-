@@ -8,11 +8,14 @@ import com.cvrs.backend.dto.CustomDto.FormDto;
 import com.cvrs.backend.dto.CustomDto.ResponseDto;
 import com.cvrs.backend.dto.VaccineDto;
 import com.cvrs.backend.entity.CitizenEntity;
+import com.cvrs.backend.entity.VaccinationLogEntity;
 import com.cvrs.backend.entity.VaccineEntity;
 import com.cvrs.backend.exception.NotFoundException;
 import com.cvrs.backend.exception.NotSavedException;
 import com.cvrs.backend.mapper.CitizenMapper;
+import com.cvrs.backend.service.IAdminService;
 import com.cvrs.backend.service.ICitizenService;
+import com.cvrs.backend.service.IVaccinationLogService;
 import com.cvrs.backend.service.IVaccineService;
 import com.cvrs.backend.util.APIConstant;
 import com.cvrs.backend.util.CvrsUtils;
@@ -31,12 +34,16 @@ public class CitizenController extends BaseController {
     private CitizenMapper citizenMapper;
     private ICitizenService citizenService;
     private IVaccineService vaccineService;
+    private IVaccinationLogService vaccinationLogService;
+    private IAdminService adminService;
 
     @Autowired
-    public CitizenController(CitizenMapper citizenMapper, ICitizenService citizenService , IVaccineService vaccineService) {
+    public CitizenController(CitizenMapper citizenMapper, ICitizenService citizenService , IVaccineService vaccineService, IVaccinationLogService vaccinationLogService, IAdminService adminService) {
         this.citizenMapper = citizenMapper;
         this.citizenService = citizenService;
         this.vaccineService = vaccineService;
+        this.vaccinationLogService = vaccinationLogService;
+        this.adminService = adminService;
 
     }
 
@@ -166,9 +173,18 @@ public class CitizenController extends BaseController {
             throw new NotFoundException("Vaccine quantity is not available or vaccine does not exits !!");
         }
 
-        CitizenEntity citizenEntity = citizenService.findByCitizenship(dto.getCitizenship());
+        CitizenEntity citizenEntity = citizenService.findByRegistrationNUmberStr(dto.getRegistrationNumber());
         if(citizenEntity == null) {
             return new ResponseEntity<>(new ResponseDto("Citizen not found"), HttpStatus.NO_CONTENT);
+        }
+        // setting vaccination record
+        VaccinationLogEntity vaccinationLogEntity = new VaccinationLogEntity();
+        vaccinationLogEntity.setAdminId(adminService.findByUsername(dto.getUsername()).getId());
+        vaccinationLogEntity.setRegistrationNumber(citizenEntity.getRegNum());
+        try {
+            vaccinationLogService.save(vaccinationLogEntity);
+        } catch (Exception ex){
+            throw new NotSavedException("vaccine record cannot be saved successfully!");
         }
         citizenEntity.setVaccinatedStatus(dto.getVaccinatedStatus());
         if(dto.getVaccineId() != null) {

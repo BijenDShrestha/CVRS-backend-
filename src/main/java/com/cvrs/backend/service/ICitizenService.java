@@ -32,4 +32,6 @@ public interface ICitizenService extends IBaseService<CitizenEntity, Long> {
 
     Map<String, Object> generateRegistrationReport(CitizenDto citizenDto);
 
+    CitizenEntity findByRegistrationNUmberStr(String registrationNumber);
+
 }

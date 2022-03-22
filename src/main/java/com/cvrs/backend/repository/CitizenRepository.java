@@ -29,4 +29,6 @@ public interface CitizenRepository extends JpaRepository<CitizenEntity, Long> {
 
     List<CitizenEntity> findAllByRegNum(String registrationNumber);
 
+    CitizenEntity findByRegNum(String registrationNumber);
+
 }

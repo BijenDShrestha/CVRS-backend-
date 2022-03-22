@@ -22,4 +22,8 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminEntity, Long> impleme
     }
 
 
+    @Override
+    public AdminEntity findByUsername(String name) {
+        return adminRepository.findByUserName(name);
+    }
 }

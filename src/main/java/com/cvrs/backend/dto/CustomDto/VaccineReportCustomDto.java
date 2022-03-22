@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Map;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,5 +20,11 @@ public class VaccineReportCustomDto {
 
     private VaccineDto vaccineDto;
 
+    private List<Map<String, String>> vaccineLog;
+
+    public VaccineReportCustomDto(CitizenDto citizenDto, VaccineDto vaccineDto) {
+        this.vaccineDto = vaccineDto;
+        this.citizenDto = citizenDto;
+    }
 
 }

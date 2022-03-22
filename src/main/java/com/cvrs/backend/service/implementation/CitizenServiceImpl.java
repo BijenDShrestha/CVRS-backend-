@@ -45,6 +45,8 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
     private VaccineMapper vaccineMapper;
     private ICitizenService iCitizenService;
     private IVaccineService vaccineService;
+    private IVaccinationLogService vaccinationLogService;
+    private IAdminService adminService;
 
     @Autowired
     public CitizenServiceImpl(JpaRepository<CitizenEntity, Long> repository,
@@ -56,7 +58,9 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
                               CitizenMapper citizenMapper,
                               VaccineRepository vaccineRepository,
                               VaccineMapper vaccineMapper,
-                              IVaccineService vaccineService) {
+                              IVaccineService vaccineService,
+                              IVaccinationLogService vaccinationLogService,
+                              IAdminService adminService) {
         super(repository);
         this.citizenRepository = citizenRepository;
         this.locationService = locationService;
@@ -71,6 +75,8 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         this.citizenMapper = citizenMapper;
         this.vaccineMapper = vaccineMapper;
         this.vaccineService = vaccineService;
+        this.vaccinationLogService = vaccinationLogService;
+        this.adminService = adminService;
     }
 
     public CitizenDto saveAllDetails(FormDto formDto){
@@ -295,6 +301,11 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
     @Override
     public Map<String, Object> generateRegistrationReport(CitizenDto citizenDto) {
         Map<String, Object> objectMap = new HashMap<>();
+        Map<String, String> firstDose = new HashMap<>();
+        Map<String,String> secondDose= new HashMap<>();
+        List<Map<String,String>> maps = new ArrayList<>();
+
+        List<VaccinationLogEntity> vaccinationLogEntities = vaccinationLogService.findAllByRegistrationNumber(citizenDto.getRegNum());
 
         if (citizenDto.getVaccinatedStatus().equalsIgnoreCase(CvrsUtils.PENDING)) {
             objectMap.put("-1",citizenDto);
@@ -302,23 +313,48 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         }
         if(citizenDto.getVaccinatedStatus().equalsIgnoreCase(CvrsUtils.GOT_ONE)) {
             VaccineEntity vaccineEntity = new VaccineEntity();
-            if(vaccineRepository.findById(citizenDto.getVaccineId()).isPresent()) {
-                vaccineEntity = vaccineRepository.findById(citizenDto.getVaccineId()).get();
-            } else {
-                throw new NotFoundException("Vaccine details not found");
-            }
+//            if(vaccineService.findById(citizenDto.getVaccineId()).isPresent()) {
+//                vaccineEntity = vaccineRepository.findById(citizenDto.getVaccineId()).get();
+//            } else {
+//                throw new NotFoundException("Vaccine details not found");
+//            }
+            vaccineEntity = vaccineService.findById(citizenDto.getVaccineId());
 
             VaccineDto vaccineDto = vaccineMapper.mapToDto(vaccineEntity);
+
+
             VaccineReportCustomDto reportCustomDto = new VaccineReportCustomDto(citizenDto, vaccineDto);
+
+            if(vaccinationLogEntities !=null){
+                firstDose.put("firsDoseDate", getDateOnly(vaccinationLogEntities.get(0).getCreatedDate()));
+                firstDose.put("givenBy", adminService.findById(vaccinationLogEntities.get(0).getAdminId()).getName());
+            }
+            maps.add(firstDose);
+            reportCustomDto.setVaccineLog(maps);
 
             objectMap.put("-2", reportCustomDto);
 
             return objectMap;
         }
+        firstDose.put("firstDoseDate", getDateOnly(vaccinationLogEntities.get(0).getCreatedDate()));
+        firstDose.put("givenBy", adminService.findById(vaccinationLogEntities.get(0).getAdminId()).getName());
 
-        objectMap.put("-3", new VaccineReportCustomDto(citizenDto,vaccineMapper.mapToDto(vaccineRepository.findById(citizenDto.getVaccineId()).get())));
+        secondDose.put("secondDoseDate", getDateOnly(vaccinationLogEntities.get(0).getCreatedDate()));
+        secondDose.put("givenBy", adminService.findById(vaccinationLogEntities.get(1).getAdminId()).getName());
+
+        maps.add(firstDose);
+        maps.add(secondDose);
+
+        VaccineDto vaccineDto1 = vaccineMapper.mapToDto(vaccineService.findById(citizenDto.getVaccineId()));
+
+        objectMap.put("-3", new VaccineReportCustomDto(citizenDto,vaccineDto1,maps));
 
         return objectMap;
+    }
+
+    @Override
+    public CitizenEntity findByRegistrationNUmberStr(String registrationNumber) {
+        return citizenRepository.findByRegNum(registrationNumber);
     }
 
     private String getDateOnly(Date date) {

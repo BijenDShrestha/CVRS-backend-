@@ -11,11 +11,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChangeDto {
 
-    private String citizenship;
+    private String registrationNumber;
 
     private String vaccinatedStatus;
 
     private Long vaccineId;
+
+    private String username;
+
 
 
 }
