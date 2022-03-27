@@ -202,11 +202,13 @@ public class CitizenController extends BaseController {
     public ResponseEntity<ResponseDto> getVaccineReport(@PathVariable("registrationNumber") Long registrationNumber) {
 
         System.out.println(registrationNumber);
-        List<CitizenDto> citizenDtos = citizenMapper.mapToDto(citizenService.findByRegistrationNumber(registrationNumber));
+        List<CitizenEntity> citizenEntity = citizenService.findByRegistrationNumber(registrationNumber);
 
-        if (citizenDtos == null) {
+        if (citizenEntity == null) {
             return new ResponseEntity<>(new ResponseDto("Registration number not found"), HttpStatus.NOT_FOUND);
         }
+        List<CitizenDto> citizenDtos = citizenMapper.mapToDto(citizenEntity);
+
         Map<String , Object> objectMap = citizenService.generateRegistrationReport(citizenDtos.get(0));
         if(objectMap.get("-1") != null) {
             return new ResponseEntity<>(new ResponseDto("Citizen did not get any vaccine", objectMap.get("-1")), HttpStatus.OK);

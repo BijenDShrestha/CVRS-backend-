@@ -68,6 +68,23 @@ public class CvrsMailService {
 
         return true;
     }
+    @Async
+    public boolean sendContactMail(String body, String subject) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+        helper.setTo("anomarmask@gmail.com");
+        helper.setSubject("Information About Query");
+        helper.setText(body,true);
+        helper.setFrom(CvrsUtils.USERNAME);
+
+        try {
+            javaMailSender.send(mimeMessage);
+        } catch (MailException ex){
+            log.error("error seding mail");
+            throw new NotFoundException("Error sending mail");
+        }
+        return true;
+    }
 
 
     @Async
@@ -86,6 +103,7 @@ public class CvrsMailService {
 
         return SendMail(citizenDto, body, "Vaccine Notification");
     }
+
 
 
     //For testing

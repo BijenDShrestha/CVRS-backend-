@@ -2,6 +2,7 @@ package com.cvrs.backend.controller;
 
 import com.cvrs.backend.controller.base.BaseController;
 import com.cvrs.backend.dto.*;
+import com.cvrs.backend.dto.CustomDto.ContactDto;
 import com.cvrs.backend.dto.CustomDto.ResponseDto;
 import com.cvrs.backend.dto.CustomDto.VaccineFormDto;
 import com.cvrs.backend.dto.CustomDto.VaccineRegisterDto;
@@ -10,6 +11,7 @@ import com.cvrs.backend.exception.NotFoundException;
 import com.cvrs.backend.exception.NotSavedException;
 import com.cvrs.backend.mapper.AdminMapper;
 import com.cvrs.backend.service.IAdminService;
+import com.cvrs.backend.service.implementation.CvrsMailService;
 import com.cvrs.backend.util.APIConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
@@ -26,12 +29,16 @@ public class AdminController extends BaseController {
     private IAdminService adminService;
     private AdminMapper adminMapper;
     private PasswordEncoder passwordEncoder;
+    private CvrsMailService cvrsMailService;
+
 
     @Autowired
-    public AdminController(IAdminService adminService, AdminMapper adminMapper, PasswordEncoder passwordEncoder) {
+    public AdminController(IAdminService adminService, AdminMapper adminMapper, PasswordEncoder passwordEncoder,
+                           CvrsMailService cvrsMailService) {
         this.adminService = adminService;
         this.adminMapper = adminMapper;
         this.passwordEncoder = passwordEncoder;
+        this.cvrsMailService = cvrsMailService;
     }
 
     @PostMapping
@@ -104,5 +111,22 @@ public class AdminController extends BaseController {
 //        formDto.setVaccineDistributionCenterDto(new VaccineDistributionCenterDto());
 
         return new ResponseEntity<>(new ResponseDto("test", formDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/contact")
+    public ResponseEntity<ResponseDto> sendContactMail(@RequestBody ContactDto contactDto) throws MessagingException {
+        if(contactDto == null) {
+            return new ResponseEntity<>(new ResponseDto("Field must not be null!"), HttpStatus.NO_CONTENT);
+        }
+        ContactDto contactDto1 = contactDto;
+        contactDto1 = contactDto;
+        String body = " Query send from "+ contactDto1.getFirstName() + contactDto1.getMiddleName() + contactDto1.getLastName()+
+                " his/her email address is : " + contactDto1.getEmail() + " description about query : " + contactDto1.getDescription();
+
+
+        cvrsMailService.sendContactMail(body, body);
+
+        return new ResponseEntity<>(new ResponseDto("Mail send Successfully"),HttpStatus.OK);
+
     }
 }

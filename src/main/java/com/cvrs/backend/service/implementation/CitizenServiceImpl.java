@@ -308,7 +308,9 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
         List<VaccinationLogEntity> vaccinationLogEntities = vaccinationLogService.findAllByRegistrationNumber(citizenDto.getRegNum());
 
         if (citizenDto.getVaccinatedStatus().equalsIgnoreCase(CvrsUtils.PENDING)) {
-            objectMap.put("-1",citizenDto);
+            VaccineReportCustomDto reportCustomDto = new VaccineReportCustomDto();
+            reportCustomDto.setCitizenDto(citizenDto);
+            objectMap.put("-1",reportCustomDto);
             return objectMap;
         }
         if(citizenDto.getVaccinatedStatus().equalsIgnoreCase(CvrsUtils.GOT_ONE)) {
@@ -326,7 +328,7 @@ public class CitizenServiceImpl extends BaseServiceImpl<CitizenEntity, Long> imp
             VaccineReportCustomDto reportCustomDto = new VaccineReportCustomDto(citizenDto, vaccineDto);
 
             if(vaccinationLogEntities !=null){
-                firstDose.put("firsDoseDate", getDateOnly(vaccinationLogEntities.get(0).getCreatedDate()));
+                firstDose.put("firstDoseDate", getDateOnly(vaccinationLogEntities.get(0).getCreatedDate()));
                 firstDose.put("givenBy", adminService.findById(vaccinationLogEntities.get(0).getAdminId()).getName());
             }
             maps.add(firstDose);
