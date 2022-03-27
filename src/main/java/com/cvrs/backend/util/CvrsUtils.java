@@ -13,8 +13,8 @@ public interface CvrsUtils {
     static final String GOT_ONE = "got one";
     static final String COMPLETE = "complete";
 
-    static final String USERNAME = "..............";
-    static final String PASSWORD = "..............";
+    static final String USERNAME = "vc74it32@vedascollege.edu.np";
+    static final String PASSWORD = "zadcockhtudprwbe";
 //    static final Integer PORT = 465;
     static final Integer PORT = 587;
 

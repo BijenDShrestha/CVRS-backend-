@@ -120,8 +120,8 @@ public class AdminController extends BaseController {
         }
         ContactDto contactDto1 = contactDto;
         contactDto1 = contactDto;
-        String body = " Query send from "+ contactDto1.getFirstName() + contactDto1.getMiddleName() + contactDto1.getLastName()+
-                " his/her email address is : " + contactDto1.getEmail() + " description about query : " + contactDto1.getDescription();
+        String body = " Query send from  "+ contactDto1.getFirstName() +" "+ contactDto1.getMiddleName() +" "+ contactDto1.getLastName()+
+                "  his/her email address is : " + contactDto1.getEmail() + "  description about query : " + contactDto1.getDescription();
 
 
         cvrsMailService.sendContactMail(body, body);
